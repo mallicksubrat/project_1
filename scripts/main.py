@@ -4,7 +4,7 @@ from pathlib import Path
 
 from ingest import ingest_data
 from transform import transform
-from load_db import load_db
+from load import load_db
 
 
 def main():
@@ -42,7 +42,12 @@ def main():
 
     # Stage 3: Load into SQLite
     logging.info("Loading data into SQLite")
-    load_db(transformed_csv, db_path)
+    try:
+        load_db(transformed_csv, db_path)
+    except (FileNotFoundError, RuntimeError) as exc:
+        logging.error(str(exc))
+        return
+
     logging.info("pipeline completed successfully")
 
 

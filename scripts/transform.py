@@ -1,5 +1,6 @@
 import csv
 import json
+from pathlib import Path
 
 
 def transform(input_file, output_file):
@@ -46,7 +47,11 @@ def transform(input_file, output_file):
 
 
 if __name__ == "__main__":
-    input_file = "/Users/subrat/project1/data/product_data.json"
-    output_file = "/Users/subrat/project1/data/transformed_data.csv"
-    transform(input_file, output_file)
-    print("Data transformed and saved to transformed_data.csv")
+    base_dir = Path(__file__).resolve().parent.parent
+    data_dir = base_dir / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    input_file = data_dir / "product_data.json"
+    output_file = data_dir / "transformed_data.csv"
+    transform(str(input_file), str(output_file))
+    print(f"Data transformed and saved to {output_file}")

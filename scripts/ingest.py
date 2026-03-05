@@ -7,7 +7,6 @@ def ingest_data(api_url):
         response = requests.get(api_url)
         response.raise_for_status()  # Check if the request was successful
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching data from API: {e}")
         return None
     data = response.json()
     return data

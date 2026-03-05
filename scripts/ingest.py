@@ -9,7 +9,7 @@ def ingest_data(api_url):
         response = requests.get(api_url)
         response.raise_for_status()  # Check if the request was successful
     except requests.exceptions.RequestException:
-        return None
+        raise RuntimeError("API ingestion failed")
     data = response.json()
     return data
 
@@ -20,11 +20,12 @@ if __name__ == "__main__":
     data_dir.mkdir(parents=True, exist_ok=True)
 
     api_url = "https://fakestoreapi.com/products"
-    data = ingest_data(api_url)
-    if data:
+    try:
+        data = ingest_data(api_url)
+    except RuntimeError as exc:
+        print(str(exc))
+    else:
         output_path = data_dir / "product_data.json"
         with open(output_path, "w") as f:
             json.dump(data, f, indent=4)
         print(f"Data ingested and saved to {output_path}")
-    else:
-        print("Error fetching data from API")
